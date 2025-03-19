@@ -47,6 +47,10 @@ namespace AdventureGame.AdventureGame.Data
             string query = "SELECT gc.ChapterName from GameChapter gc " +
                 "JOIN GameEvent ge ON gc.ChapterID = ge.ChapterID " +
                 "WHERE ge.EventID = @eventId";
+            var parameters = new Dictionary<string, object> { { "@eventId", eventId } };
+
+            object result = DatabaseHelper.ExecuteScalar(query, parameters);
+            return result != null ? result.ToString() : "Unknown Chapter";
         }
 
         public GameEvent GetEvent(int eventId)

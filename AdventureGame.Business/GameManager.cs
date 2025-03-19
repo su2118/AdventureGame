@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AdventureGame.AdventureGame.Data;
 using AdventureGame.AdventureGame.Model;
+using DevExpress.Internal.WinApi.Windows.UI.Notifications;
 
 namespace AdventureGame.AdventureGame.Business
 {
@@ -39,8 +40,12 @@ namespace AdventureGame.AdventureGame.Business
         {
             return repository.GetChoices(eventId);
         }
+        public string GetChapterNameForEvent (int eventId)
+        {
+            return repository.GetChapterNameForEvent(eventId);
+        }
         // Handle player choice and determine next event
-        public int ProcessChoice(int eventId, string choice)
+       /* public int ProcessChoice(int eventId, string choice)
         {
             GameEvent gameEvent = GetGameEvent(eventId);
             if (gameEvent.IsYesNoQuestion)
@@ -48,6 +53,6 @@ namespace AdventureGame.AdventureGame.Business
                 return choice == "Yes" ? gameEvent.NextEventYes ?? 0 : gameEvent.NextEventNo ?? 0;
             }
             return gameEvent.NextEventYes ?? 0; // Default to NextEventYes if no Yes/No choice
-        }
+        }*/
     }
 }

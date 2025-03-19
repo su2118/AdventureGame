@@ -59,6 +59,10 @@ namespace AdventureGame.AdventureGame.UI
             }
             lblStoryText.Text = gameEvent.EventText;
             pnlChoices.Controls.Clear(); // Clear previous choices
+
+            //ChapterName 
+            string chapterName = gameManager.GetChapterNameForEvent(eventId);
+            lblChapterName.Text = $"Chapter: {chapterName}";
             
             if(gameEvent.RedirectToEventID.HasValue)
             {
