@@ -33,10 +33,14 @@
             this.behaviorManager1 = new DevExpress.Utils.Behaviors.BehaviorManager(this.components);
             this.panelControl1 = new DevExpress.XtraEditors.PanelControl();
             this.lblInventory = new DevExpress.XtraEditors.LabelControl();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.btnNext = new DevExpress.XtraEditors.SimpleButton();
+            this.lblStoryText = new DevExpress.XtraEditors.LabelControl();
+            this.pnlChoices = new DevExpress.XtraEditors.PanelControl();
+            this.btnNo = new DevExpress.XtraEditors.SimpleButton();
+            this.btnYes = new DevExpress.XtraEditors.SimpleButton();
             ((System.ComponentModel.ISupportInitialize)(this.behaviorManager1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.panelControl1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pnlChoices)).BeginInit();
+            this.pnlChoices.SuspendLayout();
             this.SuspendLayout();
             // 
             // lblChapterName
@@ -51,9 +55,9 @@
             // 
             // panelControl1
             // 
-            this.panelControl1.Location = new System.Drawing.Point(36, 213);
+            this.panelControl1.Location = new System.Drawing.Point(453, 256);
             this.panelControl1.Name = "panelControl1";
-            this.panelControl1.Size = new System.Drawing.Size(324, 194);
+            this.panelControl1.Size = new System.Drawing.Size(324, 156);
             this.panelControl1.TabIndex = 1;
             // 
             // lblInventory
@@ -62,44 +66,75 @@
             this.lblInventory.Appearance.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblInventory.Appearance.Options.UseBackColor = true;
             this.lblInventory.Appearance.Options.UseFont = true;
-            this.lblInventory.Location = new System.Drawing.Point(36, 175);
+            this.lblInventory.Location = new System.Drawing.Point(573, 211);
             this.lblInventory.Name = "lblInventory";
             this.lblInventory.Size = new System.Drawing.Size(94, 23);
             this.lblInventory.TabIndex = 2;
             this.lblInventory.Text = "Inventory";
             // 
-            // textBox1
+            // lblStoryText
             // 
-            this.textBox1.Location = new System.Drawing.Point(231, 85);
-            this.textBox1.Multiline = true;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(332, 74);
-            this.textBox1.TabIndex = 5;
+            this.lblStoryText.Appearance.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblStoryText.Appearance.Options.UseFont = true;
+            this.lblStoryText.Location = new System.Drawing.Point(12, 211);
+            this.lblStoryText.Name = "lblStoryText";
+            this.lblStoryText.Size = new System.Drawing.Size(68, 19);
+            this.lblStoryText.TabIndex = 7;
+            this.lblStoryText.Text = "StoryText";
             // 
-            // btnNext
+            // pnlChoices
             // 
-            this.btnNext.Location = new System.Drawing.Point(646, 384);
-            this.btnNext.Name = "btnNext";
-            this.btnNext.Size = new System.Drawing.Size(75, 23);
-            this.btnNext.TabIndex = 6;
-            this.btnNext.Text = "Next";
-            this.btnNext.Click += new System.EventHandler(this.btnNext_Click);
+            this.pnlChoices.Controls.Add(this.btnNo);
+            this.pnlChoices.Controls.Add(this.btnYes);
+            this.pnlChoices.Location = new System.Drawing.Point(12, 256);
+            this.pnlChoices.Name = "pnlChoices";
+            this.pnlChoices.Size = new System.Drawing.Size(412, 156);
+            this.pnlChoices.TabIndex = 8;
+            // 
+            // btnNo
+            // 
+            this.btnNo.Appearance.BackColor = System.Drawing.Color.SlateGray;
+            this.btnNo.Appearance.BorderColor = System.Drawing.Color.Black;
+            this.btnNo.Appearance.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnNo.Appearance.Options.UseBackColor = true;
+            this.btnNo.Appearance.Options.UseBorderColor = true;
+            this.btnNo.Appearance.Options.UseFont = true;
+            this.btnNo.Location = new System.Drawing.Point(128, 24);
+            this.btnNo.Name = "btnNo";
+            this.btnNo.Size = new System.Drawing.Size(75, 31);
+            this.btnNo.TabIndex = 1;
+            this.btnNo.Text = "No";
+            // 
+            // btnYes
+            // 
+            this.btnYes.Appearance.BackColor = System.Drawing.Color.SlateGray;
+            this.btnYes.Appearance.BorderColor = System.Drawing.Color.Black;
+            this.btnYes.Appearance.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnYes.Appearance.Options.UseBackColor = true;
+            this.btnYes.Appearance.Options.UseBorderColor = true;
+            this.btnYes.Appearance.Options.UseFont = true;
+            this.btnYes.Location = new System.Drawing.Point(16, 23);
+            this.btnYes.Name = "btnYes";
+            this.btnYes.Size = new System.Drawing.Size(75, 32);
+            this.btnYes.TabIndex = 0;
+            this.btnYes.Text = "yes";
             // 
             // GameForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.btnNext);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.pnlChoices);
+            this.Controls.Add(this.lblStoryText);
             this.Controls.Add(this.lblInventory);
             this.Controls.Add(this.panelControl1);
             this.Controls.Add(this.lblChapterName);
             this.Name = "GameForm";
             this.Text = "GameForm";
-            this.Load += new System.EventHandler(this.GameForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.behaviorManager1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.panelControl1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pnlChoices)).EndInit();
+            this.pnlChoices.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -111,7 +146,9 @@
         private DevExpress.Utils.Behaviors.BehaviorManager behaviorManager1;
         private DevExpress.XtraEditors.PanelControl panelControl1;
         private DevExpress.XtraEditors.LabelControl lblInventory;
-        private System.Windows.Forms.TextBox textBox1;
-        private DevExpress.XtraEditors.SimpleButton btnNext;
+        private DevExpress.XtraEditors.LabelControl lblStoryText;
+        private DevExpress.XtraEditors.PanelControl pnlChoices;
+        private DevExpress.XtraEditors.SimpleButton btnNo;
+        private DevExpress.XtraEditors.SimpleButton btnYes;
     }
 }

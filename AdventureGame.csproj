@@ -108,12 +108,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AdventureGame.Business\GameManger.cs" />
+    <Compile Include="AdventureGame.Business\GameManager.cs" />
+    <Compile Include="AdventureGame.Data\DatabaseHelper.cs" />
     <Compile Include="AdventureGame.Data\GameRepository.cs" />
     <Compile Include="AdventureGame.Model\ChapterLink.cs" />
     <Compile Include="AdventureGame.Model\ChapterStory.cs" />
     <Compile Include="AdventureGame.Model\GameChapter.cs" />
     <Compile Include="AdventureGame.Model\GameChoice.cs" />
+    <Compile Include="AdventureGame.Model\GameEvent.cs" />
     <Compile Include="AdventureGame.Model\Inventory.cs" />
     <Compile Include="AdventureGame.Model\Player.cs" />
     <Compile Include="AdventureGame.Model\PlayerInventory.cs" />
