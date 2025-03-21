@@ -25,25 +25,13 @@ namespace AdventureGame.AdventureGame.UI
 
         private int currentEventId;
 
-        private int currentStoryIndex = 1;
         public GameForm()
         {
             InitializeComponent();
             gameManager = new GameManager();
-           // LoadChapter(currentStoryIndex);
             gameRepository = new GameRepository();
             LoadEvent(1);
         }
-       /* private void LoadChapter(int chapterID)
-        {
-            gameManager.LoadChapter(chapterID); 
-            lblChapterName.Text = gameManager.CurrentChapter.ChapterName;
-        }*/
-
-        /*  private void btnNext_Click(object sender, EventArgs e)
-          {
-              LoadChapter(currentStoryIndex+1);
-          }*/
 
         // Load and display a game event
         private async void LoadEvent(int eventId)

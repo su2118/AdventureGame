@@ -45,19 +45,19 @@
             // 
             // lblChapterName
             // 
-            this.lblChapterName.Appearance.Font = new System.Drawing.Font("Tahoma", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblChapterName.Appearance.Font = new System.Drawing.Font("Tahoma", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblChapterName.Appearance.Options.UseFont = true;
-            this.lblChapterName.Location = new System.Drawing.Point(316, 38);
+            this.lblChapterName.Location = new System.Drawing.Point(278, 42);
             this.lblChapterName.Name = "lblChapterName";
-            this.lblChapterName.Size = new System.Drawing.Size(169, 25);
+            this.lblChapterName.Size = new System.Drawing.Size(194, 33);
             this.lblChapterName.TabIndex = 0;
-            this.lblChapterName.Text = "lblChapterName";
+            this.lblChapterName.Text = "Chapter Name";
             // 
             // panelControl1
             // 
-            this.panelControl1.Location = new System.Drawing.Point(453, 256);
+            this.panelControl1.Location = new System.Drawing.Point(453, 202);
             this.panelControl1.Name = "panelControl1";
-            this.panelControl1.Size = new System.Drawing.Size(324, 156);
+            this.panelControl1.Size = new System.Drawing.Size(324, 210);
             this.panelControl1.TabIndex = 1;
             // 
             // lblInventory
@@ -66,7 +66,7 @@
             this.lblInventory.Appearance.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblInventory.Appearance.Options.UseBackColor = true;
             this.lblInventory.Appearance.Options.UseFont = true;
-            this.lblInventory.Location = new System.Drawing.Point(573, 211);
+            this.lblInventory.Location = new System.Drawing.Point(576, 140);
             this.lblInventory.Name = "lblInventory";
             this.lblInventory.Size = new System.Drawing.Size(94, 23);
             this.lblInventory.TabIndex = 2;
@@ -76,7 +76,7 @@
             // 
             this.lblStoryText.Appearance.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblStoryText.Appearance.Options.UseFont = true;
-            this.lblStoryText.Location = new System.Drawing.Point(12, 211);
+            this.lblStoryText.Location = new System.Drawing.Point(12, 143);
             this.lblStoryText.Name = "lblStoryText";
             this.lblStoryText.Size = new System.Drawing.Size(68, 19);
             this.lblStoryText.TabIndex = 7;
@@ -86,9 +86,9 @@
             // 
             this.pnlChoices.Controls.Add(this.btnNo);
             this.pnlChoices.Controls.Add(this.btnYes);
-            this.pnlChoices.Location = new System.Drawing.Point(12, 256);
+            this.pnlChoices.Location = new System.Drawing.Point(12, 202);
             this.pnlChoices.Name = "pnlChoices";
-            this.pnlChoices.Size = new System.Drawing.Size(412, 156);
+            this.pnlChoices.Size = new System.Drawing.Size(412, 210);
             this.pnlChoices.TabIndex = 8;
             // 
             // btnNo
