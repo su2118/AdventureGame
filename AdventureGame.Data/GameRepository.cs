@@ -68,7 +68,6 @@ namespace AdventureGame.AdventureGame.Data
                 NextEventYes = row["NextEventYes"] as int?,
                 NextEventNo = row["NextEventNo"] as int?,
                 MoveToChapter = row["MoveToChapter"] as int?,
-                RedirectToMenu = Convert.ToBoolean(row["RedirectToMenu"]),
                 RedirectToEventID = row["RedirectToEventID"] as int?
             };
         }

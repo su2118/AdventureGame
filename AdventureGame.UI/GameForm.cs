@@ -22,7 +22,7 @@ namespace AdventureGame.AdventureGame.UI
         private GameManager gameManager;
 
         private readonly GameRepository gameRepository;
-
+            
         private int currentEventId;
 
         public GameForm()

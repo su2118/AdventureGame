@@ -14,7 +14,7 @@ namespace AdventureGame.AdventureGame.Model
 
 
         public string EventText { get; set; }
-
+                    
         public bool IsYesNoQuestion { get; set; }
 
 
