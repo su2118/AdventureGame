@@ -63,11 +63,11 @@ namespace AdventureGame.AdventureGame.Business
        /* public List<string> AddItemToPlayerInventory (int userId, string itemName)
         {
             return repository.AddItemToPlayerInventory(userId, itemName);
-        }
+        }*/
         public List<int> GetInventoryIDByName(List<string> itemName)
         {
             return repository.GetInventoryIDByName(itemName);
-        }*/
+        }
         // Handle player choice and determine next event
         /* public int ProcessChoice(int eventId, string choice)
          {

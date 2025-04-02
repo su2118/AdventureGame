@@ -183,14 +183,14 @@ namespace AdventureGame.AdventureGame.UI
         }
         private void ShowItemSelection(int eventId)
         {
-            List<string> foundItmes = gameManager.GetEventItem(eventId);
+            List<string> foundItems = gameManager.GetEventItem(eventId);
             List<CheckBox> checkBoxes = new List<CheckBox>();
             int yOffset = 10;
 
             pnlChoices.Controls.Clear();
 
             //create check box for found items
-            foreach (string item in foundItmes)
+            foreach (string item in foundItems)
             {
                 CheckBox chkItem = new CheckBox()
                 {
@@ -212,7 +212,7 @@ namespace AdventureGame.AdventureGame.UI
                 Location = new Point(10, yOffset),
                 Width = 200
             };
-          //  btnConfirm.Click += (sender, e) => PickSelectedItems(checkBoxes);
+            btnConfirm.Click += (sender, e) => PickSelectedItems(checkBoxes);
             pnlChoices.Controls.Add(btnConfirm);
         }
 
@@ -222,7 +222,7 @@ namespace AdventureGame.AdventureGame.UI
               inventoryForm.ShowDialog();
           }*/
 
-     /*   private void PickSelectedItems(List<CheckBox> checkBoxes)                             
+        private void PickSelectedItems(List<CheckBox> checkBoxes)                             
         {
             List<string> selectItems = checkBoxes
                 .Where(chk => chk.Checked) //only check items
@@ -234,11 +234,12 @@ namespace AdventureGame.AdventureGame.UI
                 return;
             }
             List<int> itemId = gameManager.GetInventoryIDByName(selectItems);
+            Console.WriteLine("ItemID:"+itemId);
             foreach (string item in selectItems)
             {
-                gameManager.AddItemToPlayerInventory(userId, item);
+                //gameManager.AddItemToPlayerInventory(userId, item);
             }
             MessageBox.Show($"You picked up :{string.Join(", ", selectItems)}");
-        }*/
+        }
     }
 }

@@ -135,20 +135,18 @@ namespace AdventureGame.AdventureGame.Data
             return DatabaseHelper.ExecuteNonQuery(query, parameters) > 0;
         }
 
-        public List<int> GetInventoryIDByName(string itemName)
+        public List<int> GetInventoryIDByName(List<string> itemName)
         {
-            string query = @"Select InventoryID FROM Inventory WHERE ItemName = @itemName";
+            string placeholder = string.Join(",", itemName.Select((_,i) => $"@name{i}"));
+            string query = $@"Select InventoryID FROM Inventory WHERE ItemName IN({placeholder})";
 
-            var parameters = new Dictionary<string, object> { { "@ItemName", itemName } };
-            var result = DatabaseHelper.ExecuteQuery(query, parameters);
-            var itemID = new List<int>();
-
-            foreach (var row in result)
+            var parameters = new Dictionary<string, object> ();
+            for(int i=0; i<itemName.Count; i++)
             {
-                itemID.Add(Convert.ToInt32(row["InventoryID"]));
+                parameters.Add($"@name{i}", itemName[i]);
             }
-
-            return itemID;
+            var result = DatabaseHelper.ExecuteQuery(query, parameters);
+            return result.Select(row => Convert.ToInt32(row["InventoryID"])).ToList();
         }
     }
 }

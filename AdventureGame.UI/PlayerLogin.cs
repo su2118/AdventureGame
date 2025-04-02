@@ -56,7 +56,7 @@ namespace AdventureGame.AdventureGame.UI
 
             if (userId != -1)
             {
-                MessageBox.Show("Login Successful");
+                MessageBox.Show("Login Successful","Success",MessageBoxButtons.OK,MessageBoxIcon.Information);
                 this.Hide();
                 gameManager.SetUser(userId);
                 GameForm gameForm = new GameForm(userId);
@@ -64,7 +64,7 @@ namespace AdventureGame.AdventureGame.UI
             }
             else
             {
-                MessageBox.Show("Your username or password is wrong. Try Again");
+                MessageBox.Show("Invalid Username or Password!","Error",MessageBoxButtons.OK,MessageBoxIcon.Error);
             }
         }
 
