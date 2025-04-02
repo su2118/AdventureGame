@@ -61,11 +61,14 @@
             // 
             // txtUsername
             // 
-            this.txtUsername.EditValue = "username";
+            this.txtUsername.EditValue = "Username";
             this.txtUsername.Location = new System.Drawing.Point(275, 169);
             this.txtUsername.Name = "txtUsername";
+            this.txtUsername.Properties.Appearance.ForeColor = System.Drawing.Color.Silver;
+            this.txtUsername.Properties.Appearance.Options.UseForeColor = true;
             this.txtUsername.Size = new System.Drawing.Size(179, 20);
             this.txtUsername.TabIndex = 2;
+            this.txtUsername.Enter += new System.EventHandler(this.txtUsername_Enter);
             // 
             // lblPassword
             // 
@@ -79,11 +82,16 @@
             // 
             // txtPassword
             // 
-            this.txtPassword.EditValue = "password";
+            this.txtPassword.EditValue = "Password";
             this.txtPassword.Location = new System.Drawing.Point(275, 237);
             this.txtPassword.Name = "txtPassword";
+            this.txtPassword.Properties.Appearance.ForeColor = System.Drawing.Color.Silver;
+            this.txtPassword.Properties.Appearance.Options.UseForeColor = true;
+            this.txtPassword.Properties.MaxLength = 10;
+            this.txtPassword.Properties.UseSystemPasswordChar = true;
             this.txtPassword.Size = new System.Drawing.Size(179, 20);
             this.txtPassword.TabIndex = 4;
+            this.txtPassword.Enter += new System.EventHandler(this.txtPassword_Enter);
             // 
             // btnSignUp
             // 
@@ -94,6 +102,7 @@
             this.btnSignUp.Size = new System.Drawing.Size(108, 49);
             this.btnSignUp.TabIndex = 5;
             this.btnSignUp.Text = "Sign Up";
+            this.btnSignUp.Click += new System.EventHandler(this.btnSignUp_Click);
             // 
             // btnLogin
             // 
@@ -104,6 +113,7 @@
             this.btnLogin.Size = new System.Drawing.Size(102, 49);
             this.btnLogin.TabIndex = 6;
             this.btnLogin.Text = "Login";
+            this.btnLogin.Click += new System.EventHandler(this.btnLogin_Click);
             // 
             // PlayerLogin
             // 

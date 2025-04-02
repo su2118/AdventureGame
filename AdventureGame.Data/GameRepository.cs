@@ -11,37 +11,6 @@ namespace AdventureGame.AdventureGame.Data
 {
     public class GameRepository
     {
-        //private string conString = "server=localhost;uid=root;pwd=512788;database=test;";
-
-        /*public GameChapter GetChapter (int chapterID)
-        {
-            using (MySqlConnection con = new MySqlConnection(conString))
-            {
-                con.Open();
-
-                string query = "Select ChapterID, ChapterName FROM GameChapter " +
-                    "WHERE ChapterID = @id";
-                using (MySqlCommand cmd = new MySqlCommand(query, con))
-                {
-                    cmd.Parameters.AddWithValue("@id", chapterID);
-
-                    using (MySqlDataReader reader = cmd.ExecuteReader())
-                    {
-                        if (reader.Read())
-                        {
-                            return new GameChapter
-                            {
-                                ChapterID = Convert.ToInt32(reader["ChapterID"]),
-
-                                ChapterName = reader["ChapterName"].ToString()
-                            };
-                        }
-                    }
-                }
-            }
-            return null;
-        }*/
-
         public string GetChapterNameForEvent(int eventId)
         {
             string query = "SELECT gc.ChapterName from GameChapter gc " +
@@ -109,6 +78,77 @@ namespace AdventureGame.AdventureGame.Data
                { "@chosenNextEventId", chosenNextEventId }
             };
             DatabaseHelper.ExecuteNonQuery(query, parameters);
+        }
+
+        public List<PlayerInventory> GetPlayerInventory(int playerId)
+        {
+            string query = "SELECT pi.InventoryID, i.ItemName, pi.Quantity from PlayerInventory pi" +
+                           "JOIN Inventory i ON pi.InventoryID = i.InventoryID" +
+                           "WHERE pi.PlayerID = @playerId";
+            var parameters = new Dictionary<string, object> { { "@playerId", playerId } };
+            var result = DatabaseHelper.ExecuteQuery(query, parameters);
+
+            List<PlayerInventory> inventory = new List<PlayerInventory>();
+            foreach (var row in result)
+            {
+                inventory.Add(new PlayerInventory
+                {
+                    InventoryID = Convert.ToInt32(row["InventoryID"]),
+                    ItemName = row["ItemName"].ToString(),
+                    Quantity = Convert.ToInt32(row["Quantitiy"])
+                });
+            }
+            return inventory;
+
+        }
+
+        public List<string> GetEventItem(int eventId)
+        {
+            string query = @"SELECT i.ItemName 
+                             FROM EventItem ei
+                             JOIN Inventory i ON ei.InventoryID = i.InventoryID
+                             WHERE ei.EventID = @eventId";
+            var parameters = new Dictionary<string, object> { { "@eventId", eventId } };
+            var result = DatabaseHelper.ExecuteQuery(query, parameters);
+
+            var items = new List<string>();
+
+            foreach(var row in result)
+            {
+                items.Add(row["ItemName"].ToString());
+            }
+
+            return items;
+
+        }
+
+        public bool AddItemToPlayerInventory(int userId, string item)
+        {
+
+            string query = @"INSERT INTO PlayerInventory (userID, InventoryID) VALUES (@userId, @item)";
+
+            var parameters = new Dictionary<string, object>
+            {
+               { "@userId", userId },
+               { "@item", item }
+            };
+            return DatabaseHelper.ExecuteNonQuery(query, parameters) > 0;
+        }
+
+        public List<int> GetInventoryIDByName(string itemName)
+        {
+            string query = @"Select InventoryID FROM Inventory WHERE ItemName = @itemName";
+
+            var parameters = new Dictionary<string, object> { { "@ItemName", itemName } };
+            var result = DatabaseHelper.ExecuteQuery(query, parameters);
+            var itemID = new List<int>();
+
+            foreach (var row in result)
+            {
+                itemID.Add(Convert.ToInt32(row["InventoryID"]));
+            }
+
+            return itemID;
         }
     }
 }

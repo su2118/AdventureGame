@@ -44,7 +44,6 @@
             this.lblGame.Size = new System.Drawing.Size(433, 39);
             this.lblGame.TabIndex = 0;
             this.lblGame.Text = "Welcome to Rusty\'s Adventure";
-            this.lblGame.Click += new System.EventHandler(this.labelControl1_Click);
             // 
             // btnStart
             // 
@@ -76,6 +75,7 @@
             this.btnExit.Size = new System.Drawing.Size(103, 39);
             this.btnExit.TabIndex = 3;
             this.btnExit.Text = "Exit";
+            this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
             // 
             // btnInfo
             // 

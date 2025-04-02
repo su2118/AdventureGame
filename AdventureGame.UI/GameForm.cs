@@ -25,11 +25,15 @@ namespace AdventureGame.AdventureGame.UI
             
         private int currentEventId;
 
-        public GameForm()
+        private int currentPlayerId;
+
+        private int userId; 
+        public GameForm(int userId)
         {
             InitializeComponent();
             gameManager = new GameManager();
             gameRepository = new GameRepository();
+            this.userId = userId;
             LoadEvent(1);
         }
 
@@ -50,14 +54,29 @@ namespace AdventureGame.AdventureGame.UI
 
             //ChapterName 
             string chapterName = gameManager.GetChapterNameForEvent(eventId);
-            lblChapterName.Text = $"Chapter: {chapterName}";
-            
-            if(gameEvent.RedirectToEventID.HasValue)
+            if (chapterName != "Unknown Chapter")
+            {
+                lblChapterName.Text = $"Chapter: {chapterName}";
+            }
+            else
+            {
+                lblChapterName.Text = "Moving to Next Chapter";
+            }
+
+            //redirecting to the menu if the player does not have items
+            if (gameEvent.RedirectToEventID.HasValue)
             {
                 Console.WriteLine($"Redirecting to Menu: {gameEvent.RedirectToEventID.Value}(Chapater Menu)");
                 await Task.Delay(1500);
 
                 LoadEvent(gameEvent.RedirectToEventID.Value);
+                return;
+            }
+            //check if this event has items to pick up 
+            List<string> foundItems = gameManager.GetEventItem(eventId);
+            if (foundItems.Count > 0)
+            {
+                ShowItemSelection(eventId);
                 return;
             }
             if (gameEvent.IsYesNoQuestion) //Check if it is yes no question
@@ -162,7 +181,64 @@ namespace AdventureGame.AdventureGame.UI
             Console.WriteLine($"Attempting to load event {eventId}");
             LoadEvent(eventId);
         }
+        private void ShowItemSelection(int eventId)
+        {
+            List<string> foundItmes = gameManager.GetEventItem(eventId);
+            List<CheckBox> checkBoxes = new List<CheckBox>();
+            int yOffset = 10;
 
-        
+            pnlChoices.Controls.Clear();
+
+            //create check box for found items
+            foreach (string item in foundItmes)
+            {
+                CheckBox chkItem = new CheckBox()
+                {
+                    Text = item,
+                    Tag = item,
+                    Location = new Point(10, yOffset),
+                    AutoSize = true
+                };
+
+                checkBoxes.Add(chkItem);
+                pnlChoices.Controls.Add(chkItem);
+                yOffset += 30;
+            }
+
+            //Add confirm selection button
+            Button btnConfirm = new Button()
+            {
+                Text = "Pick Selected Items",
+                Location = new Point(10, yOffset),
+                Width = 200
+            };
+          //  btnConfirm.Click += (sender, e) => PickSelectedItems(checkBoxes);
+            pnlChoices.Controls.Add(btnConfirm);
+        }
+
+        /*  private void btnInventory_Click(object sender, EventArgs e)
+          {
+              InventoryForm inventoryForm = new InventoryForm(currentPlayerId);
+              inventoryForm.ShowDialog();
+          }*/
+
+     /*   private void PickSelectedItems(List<CheckBox> checkBoxes)                             
+        {
+            List<string> selectItems = checkBoxes
+                .Where(chk => chk.Checked) //only check items
+                .Select(chk => chk.Tag.ToString()) //covert to string
+                .ToList();
+            if (selectItems.Count == 0)
+            {
+                MessageBox.Show("Please select at least one item");
+                return;
+            }
+            List<int> itemId = gameManager.GetInventoryIDByName(selectItems);
+            foreach (string item in selectItems)
+            {
+                gameManager.AddItemToPlayerInventory(userId, item);
+            }
+            MessageBox.Show($"You picked up :{string.Join(", ", selectItems)}");
+        }*/
     }
 }

@@ -8,10 +8,11 @@ namespace AdventureGame.AdventureGame.Model
 {
     public class PlayerInventory
     {
-        public int PlayerInventoryID { get; set; }
-
         public int PlayerID { get; set; }
 
         public int InventoryID { get; set; }
+
+        public string ItemName { get; set; }
+        public int Quantity { get; set; }
     }
 }

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AdventureGame.AdventureGame.Data;
 using AdventureGame.AdventureGame.Model;
 using DevExpress.Internal.WinApi.Windows.UI.Notifications;
+using DevExpress.XtraPrinting.Native.Interaction;
 
 namespace AdventureGame.AdventureGame.Business
 {
@@ -14,6 +15,13 @@ namespace AdventureGame.AdventureGame.Business
         private GameRepository repository;
 
         public GameChapter CurrentChapter { get; private set; }
+
+        public int UserID { get; private set; }=-1; //Default: not logged in
+
+        public void SetUser(int userId)
+        {
+            this.UserID = userId;
+        }
 
         public GameManager()
         {
@@ -44,15 +52,31 @@ namespace AdventureGame.AdventureGame.Business
         {
             return repository.GetChapterNameForEvent(eventId);
         }
-        // Handle player choice and determine next event
-       /* public int ProcessChoice(int eventId, string choice)
+        public List<PlayerInventory> GetPlayerInventory(int playerId)
         {
-            GameEvent gameEvent = GetGameEvent(eventId);
-            if (gameEvent.IsYesNoQuestion)
-            {
-                return choice == "Yes" ? gameEvent.NextEventYes ?? 0 : gameEvent.NextEventNo ?? 0;
-            }
-            return gameEvent.NextEventYes ?? 0; // Default to NextEventYes if no Yes/No choice
+            return repository.GetPlayerInventory(playerId);
+        }
+        public List<string> GetEventItem(int eventId)
+        {
+            return repository.GetEventItem(eventId);
+        }
+       /* public List<string> AddItemToPlayerInventory (int userId, string itemName)
+        {
+            return repository.AddItemToPlayerInventory(userId, itemName);
+        }
+        public List<int> GetInventoryIDByName(List<string> itemName)
+        {
+            return repository.GetInventoryIDByName(itemName);
         }*/
+        // Handle player choice and determine next event
+        /* public int ProcessChoice(int eventId, string choice)
+         {
+             GameEvent gameEvent = GetGameEvent(eventId);
+             if (gameEvent.IsYesNoQuestion)
+             {
+                 return choice == "Yes" ? gameEvent.NextEventYes ?? 0 : gameEvent.NextEventNo ?? 0;
+             }
+             return gameEvent.NextEventYes ?? 0; // Default to NextEventYes if no Yes/No choice
+         }*/
     }
 }
