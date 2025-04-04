@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using AdventureGame.AdventureGame.Data;
 using AdventureGame.AdventureGame.Model;
 using DevExpress.Internal.WinApi.Windows.UI.Notifications;
@@ -52,9 +53,9 @@ namespace AdventureGame.AdventureGame.Business
         {
             return repository.GetChapterNameForEvent(eventId);
         }
-        public List<PlayerInventory> GetPlayerInventory(int playerId)
+        public List<PlayerInventory> GetPlayerInventory(int userId)
         {
-            return repository.GetPlayerInventory(playerId);
+            return repository.GetPlayerInventory(userId);
         }
         public List<string> GetEventItem(int eventId)
         {
@@ -64,9 +65,22 @@ namespace AdventureGame.AdventureGame.Business
         {
             return repository.AddItemToPlayerInventory(userId, itemName);
         }*/
-        public List<int> GetInventoryIDByName(List<string> itemName)
+       /* public List<int> GetInventoryIDByName(List<string> itemName)
         {
             return repository.GetInventoryIDByName(itemName);
+        }*/
+        public void AddItemToPlayerInventory(int userId, List<string> itemNames)
+        {
+            List<int> itemIds = repository.GetInventoryIDByName(itemNames);
+            Console.WriteLine("item Id" + itemIds.Count);
+            if (itemIds.Count > 0)
+            {
+                repository.AddItemToPlayerInventory(userId, itemIds);
+            }
+            else
+            {
+                MessageBox.Show("Error");
+            }
         }
         // Handle player choice and determine next event
         /* public int ProcessChoice(int eventId, string choice)

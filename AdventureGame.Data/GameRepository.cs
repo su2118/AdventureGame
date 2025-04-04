@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AdventureGame.AdventureGame.Model;
 using MySql.Data.MySqlClient;
+using static DevExpress.XtraEditors.Mask.MaskSettings;
 
 namespace AdventureGame.AdventureGame.Data
 {
@@ -80,12 +81,13 @@ namespace AdventureGame.AdventureGame.Data
             DatabaseHelper.ExecuteNonQuery(query, parameters);
         }
 
-        public List<PlayerInventory> GetPlayerInventory(int playerId)
+        public List<PlayerInventory> GetPlayerInventory(int userId)
         {
-            string query = "SELECT pi.InventoryID, i.ItemName, pi.Quantity from PlayerInventory pi" +
-                           "JOIN Inventory i ON pi.InventoryID = i.InventoryID" +
-                           "WHERE pi.PlayerID = @playerId";
-            var parameters = new Dictionary<string, object> { { "@playerId", playerId } };
+            string query = @"SELECT pi.UserID, pi.InventoryID, i.ItemName, pi.Quantity 
+                           from PlayerInventory pi
+                           JOIN Inventory i ON pi.InventoryID = i.InventoryID
+                           WHERE pi.UserID = @userId";
+            var parameters = new Dictionary<string, object> { { "@userId", userId } };
             var result = DatabaseHelper.ExecuteQuery(query, parameters);
 
             List<PlayerInventory> inventory = new List<PlayerInventory>();
@@ -93,9 +95,10 @@ namespace AdventureGame.AdventureGame.Data
             {
                 inventory.Add(new PlayerInventory
                 {
+                    UserID = Convert.ToInt32(row["UserID"]),
                     InventoryID = Convert.ToInt32(row["InventoryID"]),
                     ItemName = row["ItemName"].ToString(),
-                    Quantity = Convert.ToInt32(row["Quantitiy"])
+                    Quantity = Convert.ToInt32(row["Quantity"])
                 });
             }
             return inventory;
@@ -122,7 +125,7 @@ namespace AdventureGame.AdventureGame.Data
 
         }
 
-        public bool AddItemToPlayerInventory(int userId, string item)
+    /*    public void AddItemToPlayerInventory(int userId, string item)
         {
 
             string query = @"INSERT INTO PlayerInventory (userID, InventoryID) VALUES (@userId, @item)";
@@ -132,8 +135,61 @@ namespace AdventureGame.AdventureGame.Data
                { "@userId", userId },
                { "@item", item }
             };
-            return DatabaseHelper.ExecuteNonQuery(query, parameters) > 0;
+             DatabaseHelper.ExecuteNonQuery(query, parameters);
+        }*/
+
+        public void AddItemToPlayerInventory(int userId, List<int> inventoryIds)
+        {
+            if(inventoryIds.Count == 0) return; // No items to addd
+
+            string query = @"INSERT INTO PlayerInventory (userID, InventoryID) VALUES ";
+
+            var parameters = new Dictionary<string, object> { { "@userId", userId } };
+
+            Console.WriteLine("List of item ID"+inventoryIds);
+
+            List<string> values = new List<string>();
+            for (int i = 0; i < inventoryIds.Count; i++) 
+            {
+                string paramName = "@item" + i;
+                values.Add($"(@userId,{paramName})");
+
+                parameters[paramName] = inventoryIds[i];
+
+            }
+            query += string.Join(",", values);
+
+            Console.WriteLine("Final Query"+query);
+            DatabaseHelper.ExecuteNonQuery(query, parameters);
         }
+
+
+      /*  public int GetInventoryIDByName(string itemName)
+        {
+            string query = @"Select InventoryID FROM Inventory WHERE ItemName = @itemName";
+
+            var parameters = new Dictionary<string, object> { { "@itemName", itemName } };
+
+            var result = DatabaseHelper.ExecuteQuery(query,parameters);
+
+            return result.Count == 1 ? Convert.ToInt32(result[0]["InventoryID"]) : -1; 
+        }
+
+        public List<int> GetInventoryIdsByName(List<string> itemNames)
+        {
+            List<int> inventoryIds = new List<int>();
+
+            foreach(var itemName in itemNames)
+            {
+                int inventoryId = GetInventoryIDByName(itemName);
+                if(inventoryId != 1)
+                {
+                    inventoryIds.Add(inventoryId);
+                }
+            }
+
+            return inventoryIds;
+        }*/
 
         public List<int> GetInventoryIDByName(List<string> itemName)
         {

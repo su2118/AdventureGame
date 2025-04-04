@@ -105,6 +105,7 @@
             this.btnInventory.Size = new System.Drawing.Size(75, 23);
             this.btnInventory.TabIndex = 9;
             this.btnInventory.Text = "Inventory";
+            this.btnInventory.Click += new System.EventHandler(this.btnInventory_Click);
             // 
             // GameForm
             // 

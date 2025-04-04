@@ -25,7 +25,7 @@ namespace AdventureGame.AdventureGame.UI
             
         private int currentEventId;
 
-        private int currentPlayerId;
+     //   private int currentPlayerId;
 
         private int userId; 
         public GameForm(int userId)
@@ -216,13 +216,13 @@ namespace AdventureGame.AdventureGame.UI
             pnlChoices.Controls.Add(btnConfirm);
         }
 
-        /*  private void btnInventory_Click(object sender, EventArgs e)
+          private void btnInventory_Click(object sender, EventArgs e)
           {
-              InventoryForm inventoryForm = new InventoryForm(currentPlayerId);
+              InventoryForm inventoryForm = new InventoryForm(userId);
               inventoryForm.ShowDialog();
-          }*/
+          }
 
-        private void PickSelectedItems(List<CheckBox> checkBoxes)                             
+       /* private void PickSelectedItems(List<CheckBox> checkBoxes)                             
         {
             List<string> selectItems = checkBoxes
                 .Where(chk => chk.Checked) //only check items
@@ -234,12 +234,29 @@ namespace AdventureGame.AdventureGame.UI
                 return;
             }
             List<int> itemId = gameManager.GetInventoryIDByName(selectItems);
-            Console.WriteLine("ItemID:"+itemId);
             foreach (string item in selectItems)
             {
-                //gameManager.AddItemToPlayerInventory(userId, item);
+               // gameManager.AddItemToPlayerInventory(userId, item);
             }
             MessageBox.Show($"You picked up :{string.Join(", ", selectItems)}");
+        }*/
+
+        private void PickSelectedItems(List<CheckBox> checkBoxes)
+        {
+            List<string> selectItems = checkBoxes
+                .Where(chk => chk.Checked) //only check items
+                .Select(chk => chk.Tag.ToString()) //covert to string
+                .ToList();
+            if (selectItems.Count == 0)
+            {
+                MessageBox.Show("Please select at least one item");
+                return;
+            }
+           
+            gameManager.AddItemToPlayerInventory(userId, selectItems);
+            
+            MessageBox.Show($"You picked up :{string.Join(", ", selectItems)}");
         }
+      
     }
 }

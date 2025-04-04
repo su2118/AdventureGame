@@ -8,7 +8,7 @@ namespace AdventureGame.AdventureGame.Model
 {
     public class PlayerInventory
     {
-        public int PlayerID { get; set; }
+        public int UserID { get; set; }
 
         public int InventoryID { get; set; }
 
