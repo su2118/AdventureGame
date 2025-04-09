@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AdventureGame.AdventureGame.Model;
+using DevExpress.Internal.WinApi.Windows.UI.Notifications;
 using MySql.Data.MySqlClient;
 using static DevExpress.XtraEditors.Mask.MaskSettings;
 
@@ -164,7 +165,7 @@ namespace AdventureGame.AdventureGame.Data
         }
 
 
-      /*  public int GetInventoryIDByName(string itemName)
+        public int GetInventoryIDByName(string itemName)
         {
             string query = @"Select InventoryID FROM Inventory WHERE ItemName = @itemName";
 
@@ -175,7 +176,7 @@ namespace AdventureGame.AdventureGame.Data
             return result.Count == 1 ? Convert.ToInt32(result[0]["InventoryID"]) : -1; 
         }
 
-        public List<int> GetInventoryIdsByName(List<string> itemNames)
+       /* public List<int> GetInventoryIdsByName(List<string> itemNames)
         {
             List<int> inventoryIds = new List<int>();
 
@@ -191,7 +192,7 @@ namespace AdventureGame.AdventureGame.Data
             return inventoryIds;
         }*/
 
-        public List<int> GetInventoryIDByName(List<string> itemName)
+        public List<int> GetInventoryIDsByName(List<string> itemName)
         {
             string placeholder = string.Join(",", itemName.Select((_,i) => $"@name{i}"));
             string query = $@"Select InventoryID FROM Inventory WHERE ItemName IN({placeholder})";
@@ -204,5 +205,22 @@ namespace AdventureGame.AdventureGame.Data
             var result = DatabaseHelper.ExecuteQuery(query, parameters);
             return result.Select(row => Convert.ToInt32(row["InventoryID"])).ToList();
         }
+
+        public void UpdatePlayerInventory(int userId, Dictionary<int, int> itemQuantites)
+        {
+            string query = @"Update PlayerInventory SET Quantity = @quantity
+                            WHERE UserID = @userId AND InventoryID = @itemId";
+            foreach (var item in itemQuantites) 
+            {
+                var parameters = new Dictionary<string, object>
+                {
+                    { "@userId", userId },
+                    { "@itemId", item.Key },
+                    { "@quantity", item.Value }
+                };
+                DatabaseHelper.ExecuteNonQuery(query, parameters);
+            }
+        }
+
     }
 }

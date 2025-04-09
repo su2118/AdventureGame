@@ -183,6 +183,7 @@ namespace AdventureGame.AdventureGame.UI
         }
         private void ShowItemSelection(int eventId)
         {
+            GameEvent gameEvent = gameManager.GetGameEvent(eventId);
             List<string> foundItems = gameManager.GetEventItem(eventId);
             List<CheckBox> checkBoxes = new List<CheckBox>();
             int yOffset = 10;
@@ -212,8 +213,16 @@ namespace AdventureGame.AdventureGame.UI
                 Location = new Point(10, yOffset),
                 Width = 200
             };
-            btnConfirm.Click += (sender, e) => PickSelectedItems(checkBoxes);
+            btnConfirm.Click += (sender, e) =>
+            {
+                if (gameEvent.NextEventYes.HasValue)
+                {
+                    LoadEvent(gameEvent.NextEventYes.Value);
+                }
+                PickSelectedItems(checkBoxes, eventId);
+            };
             pnlChoices.Controls.Add(btnConfirm);
+            
         }
 
           private void btnInventory_Click(object sender, EventArgs e)
@@ -222,26 +231,7 @@ namespace AdventureGame.AdventureGame.UI
               inventoryForm.ShowDialog();
           }
 
-       /* private void PickSelectedItems(List<CheckBox> checkBoxes)                             
-        {
-            List<string> selectItems = checkBoxes
-                .Where(chk => chk.Checked) //only check items
-                .Select(chk => chk.Tag.ToString()) //covert to string
-                .ToList();
-            if (selectItems.Count == 0)
-            {
-                MessageBox.Show("Please select at least one item");
-                return;
-            }
-            List<int> itemId = gameManager.GetInventoryIDByName(selectItems);
-            foreach (string item in selectItems)
-            {
-               // gameManager.AddItemToPlayerInventory(userId, item);
-            }
-            MessageBox.Show($"You picked up :{string.Join(", ", selectItems)}");
-        }*/
-
-        private void PickSelectedItems(List<CheckBox> checkBoxes)
+        private void PickSelectedItems(List<CheckBox> checkBoxes, int eventId)
         {
             List<string> selectItems = checkBoxes
                 .Where(chk => chk.Checked) //only check items
@@ -256,6 +246,7 @@ namespace AdventureGame.AdventureGame.UI
             gameManager.AddItemToPlayerInventory(userId, selectItems);
             
             MessageBox.Show($"You picked up :{string.Join(", ", selectItems)}");
+
         }
       
     }

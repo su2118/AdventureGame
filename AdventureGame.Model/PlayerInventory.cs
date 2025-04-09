@@ -14,5 +14,7 @@ namespace AdventureGame.AdventureGame.Model
 
         public string ItemName { get; set; }
         public int Quantity { get; set; }
+
+        public string Dispaly => $"{ItemName} x {Quantity}";
     }
 }

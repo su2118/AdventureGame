@@ -61,18 +61,9 @@ namespace AdventureGame.AdventureGame.Business
         {
             return repository.GetEventItem(eventId);
         }
-       /* public List<string> AddItemToPlayerInventory (int userId, string itemName)
-        {
-            return repository.AddItemToPlayerInventory(userId, itemName);
-        }*/
-       /* public List<int> GetInventoryIDByName(List<string> itemName)
-        {
-            return repository.GetInventoryIDByName(itemName);
-        }*/
         public void AddItemToPlayerInventory(int userId, List<string> itemNames)
         {
-            List<int> itemIds = repository.GetInventoryIDByName(itemNames);
-            Console.WriteLine("item Id" + itemIds.Count);
+            List<int> itemIds = repository.GetInventoryIDsByName(itemNames);
             if (itemIds.Count > 0)
             {
                 repository.AddItemToPlayerInventory(userId, itemIds);
@@ -81,6 +72,11 @@ namespace AdventureGame.AdventureGame.Business
             {
                 MessageBox.Show("Error");
             }
+        }
+        public void UpdatePlayerInventory(int userId, List<int> selectedItems)
+        {
+            Dictionary<int,int> quantities = selectedItems.ToDictionary(itemId => itemId, _ => 0 );
+            repository.UpdatePlayerInventory(userId, quantities);
         }
         // Handle player choice and determine next event
         /* public int ProcessChoice(int eventId, string choice)

@@ -51,6 +51,7 @@
             this.btnDrop.Size = new System.Drawing.Size(77, 35);
             this.btnDrop.TabIndex = 1;
             this.btnDrop.Text = "Drop";
+            this.btnDrop.Click += new System.EventHandler(this.btnDrop_Click);
             // 
             // btnUse
             // 

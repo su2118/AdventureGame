@@ -46,7 +46,7 @@ namespace AdventureGame.AdventureGame.Data
         }
 
 
-        // Execute INSERT, UPDATE, DELETE (non-query commands)
+        // Execute INSERT, UPDATE, DELETE 
         public static int ExecuteNonQuery(string query, Dictionary<string, object> parameters = null)
         {
             using (MySqlConnection con = new MySqlConnection(connectionString))
