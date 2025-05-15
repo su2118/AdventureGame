@@ -6,16 +6,12 @@ using System.Threading.Tasks;
 
 namespace AdventureGame.AdventureGame.Model
 {
-    public class Player
+    public class User
     {
         public int UserID { get; set; }
 
-        public int EventID { get; set; }
+        public string UserName { get; set; }
 
-        public GameStatus GameStatus { get; set; }
-
-        public bool HasArm {  get; set; }
-
-        public DateTime LastSaved { get; set; }
+        public string Password { get; set; }
     }
 }

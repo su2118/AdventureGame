@@ -108,20 +108,33 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AdventureGame.Business\GameManger.cs" />
+    <Compile Include="AdventureGame.Business\GameManager.cs" />
+    <Compile Include="AdventureGame.Business\UserManager.cs" />
+    <Compile Include="AdventureGame.Data\DatabaseHelper.cs" />
     <Compile Include="AdventureGame.Data\GameRepository.cs" />
+    <Compile Include="AdventureGame.Data\UserRepository.cs" />
     <Compile Include="AdventureGame.Model\ChapterLink.cs" />
     <Compile Include="AdventureGame.Model\ChapterStory.cs" />
+    <Compile Include="AdventureGame.Model\EventItem.cs" />
     <Compile Include="AdventureGame.Model\GameChapter.cs" />
     <Compile Include="AdventureGame.Model\GameChoice.cs" />
+    <Compile Include="AdventureGame.Model\GameEvent.cs" />
+    <Compile Include="AdventureGame.Model\GameStatus.cs" />
     <Compile Include="AdventureGame.Model\Inventory.cs" />
     <Compile Include="AdventureGame.Model\Player.cs" />
     <Compile Include="AdventureGame.Model\PlayerInventory.cs" />
+    <Compile Include="AdventureGame.Model\User.cs" />
     <Compile Include="AdventureGame.UI\GameForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="AdventureGame.UI\GameForm.Designer.cs">
       <DependentUpon>GameForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AdventureGame.UI\InventoryForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AdventureGame.UI\InventoryForm.Designer.cs">
+      <DependentUpon>InventoryForm.cs</DependentUpon>
     </Compile>
     <Compile Include="AdventureGame.UI\MainMenu.cs">
       <SubType>Form</SubType>
@@ -129,14 +142,27 @@
     <Compile Include="AdventureGame.UI\MainMenu.Designer.cs">
       <DependentUpon>MainMenu.cs</DependentUpon>
     </Compile>
+    <Compile Include="AdventureGame.UI\PlayerLogin.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AdventureGame.UI\PlayerLogin.Designer.cs">
+      <DependentUpon>PlayerLogin.cs</DependentUpon>
+    </Compile>
     <Compile Include="AdventureGame.UI\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="AdventureGame.UI\GameForm.resx">
       <DependentUpon>GameForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="AdventureGame.UI\InventoryForm.resx">
+      <DependentUpon>InventoryForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="AdventureGame.UI\MainMenu.resx">
       <DependentUpon>MainMenu.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="AdventureGame.UI\PlayerLogin.resx">
+      <DependentUpon>PlayerLogin.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\licenses.licx" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
