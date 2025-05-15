@@ -53,6 +53,9 @@ namespace AdventureGame.AdventureGame.Business
         {
             return HashPassword(password) == storedHash;
         }
-
+        public int getUserID(string username)
+        {
+            return userRepository.GetUserID(username);
+        }
     }
 }

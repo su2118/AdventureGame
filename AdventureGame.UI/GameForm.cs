@@ -25,6 +25,8 @@ namespace AdventureGame.AdventureGame.UI
             
         private int currentEventId;
 
+        private GameEvent gameEvent;
+
      //   private int currentPlayerId;
 
         private int userId; 
@@ -34,7 +36,8 @@ namespace AdventureGame.AdventureGame.UI
             gameManager = new GameManager();
             gameRepository = new GameRepository();
             this.userId = userId;
-            LoadEvent(1);
+           // LoadEvent(1);
+           LoadPlayerProgress();
         }
 
         // Load and display a game event
@@ -43,7 +46,7 @@ namespace AdventureGame.AdventureGame.UI
             HideYesNoButtons(); // Hide buttons when loading new event
             currentEventId = eventId;
             Console.WriteLine($"Current EventID : {eventId}");
-            GameEvent gameEvent = gameManager.GetGameEvent(eventId);
+            gameEvent = gameManager.GetGameEvent(eventId);
             if (gameEvent == null)
             {
                 MessageBox.Show("Error loading event. Please check the database.");
@@ -51,6 +54,16 @@ namespace AdventureGame.AdventureGame.UI
             }
             lblStoryText.Text = gameEvent.EventText;
             pnlChoices.Controls.Clear(); // Clear previous choices
+
+            HandleGrantsItem(gameEvent);
+
+            Console.WriteLine("Random:" + gameEvent.IsRandomEvent);
+            if (gameEvent.IsRandomEvent)
+            {
+                Console.WriteLine("It is a random event");
+                await HandleRandomEvent();
+                return;
+            }
 
             //ChapterName 
             string chapterName = gameManager.GetChapterNameForEvent(eventId);
@@ -79,7 +92,8 @@ namespace AdventureGame.AdventureGame.UI
                 ShowItemSelection(eventId);
                 return;
             }
-            if (gameEvent.IsYesNoQuestion) //Check if it is yes no question
+
+            if (gameEvent.IsYesNoQuestion && !gameEvent.IsRandomEvent) //Check if it is yes no question
             {
                 if (gameEvent.NextEventYes.HasValue || gameEvent.NextEventNo.HasValue)
                 {
@@ -94,6 +108,7 @@ namespace AdventureGame.AdventureGame.UI
             {
                 if (gameEvent.NextEventYes.HasValue)
                 {
+
                     await Task.Delay(2000);
 
                     LoadEvent(gameEvent.NextEventYes.Value);     
@@ -104,6 +119,7 @@ namespace AdventureGame.AdventureGame.UI
                     LoadChoices(eventId);
                 }
             }
+            CheckGameStatus(gameEvent);
         }
         // Load dynamic choices as buttons
         private void LoadChoices(int eventId)
@@ -162,7 +178,28 @@ namespace AdventureGame.AdventureGame.UI
         {
             if (btnYes.Tag is int nextEventId && nextEventId > 0)
             {
-                LoadEvent(nextEventId);
+               // GameEvent nextEvent = gameManager.GetGameEvent(nextEventId);
+                if (!string.IsNullOrEmpty(gameEvent.RequiredItem))
+                {
+                    List<string> requiredItems = gameEvent.RequiredItem
+                                                .Split(',')
+                                                .Select(x => x.Trim())
+                                                .ToList();
+                    if (gameManager.HasAllItems(userId, requiredItems))
+                    {
+                        gameManager.UseItems(userId, requiredItems);
+                        gameManager.SaveProgress(userId, nextEventId);
+                        LoadEvent(nextEventId);
+                    }
+                    else
+                    {
+                        MessageBox.Show($"You need: {gameEvent.RequiredItem}.\nYou don't have the required item(s) yet");
+                        return;
+                    }
+
+                   // bool hasAllItems = gameManager.HasAllItems(userId, requiredItems);
+                }
+               // LoadEvent(nextEventId);
                 HideYesNoButtons();
             }
         }
@@ -171,6 +208,29 @@ namespace AdventureGame.AdventureGame.UI
         {
             if (btnNo.Tag is int nextEventId && nextEventId > 0)
             {
+                if (!string.IsNullOrEmpty(gameEvent.RequiredItem))
+                {
+                    List<string> requiredItems = gameEvent.RequiredItem
+                                                .Split(',')
+                                                .Select(x => x.Trim())
+                                                .ToList();
+                    if (gameManager.HasAllItems(userId, requiredItems))
+                    {
+                        DialogResult result = MessageBox.Show(
+                            $"You have the required items : {gameEvent.RequiredItem}. Please press Yes",
+                            "Warning Message",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Warning
+                            );
+
+                        if (result == DialogResult.OK)
+                        {
+                            return;// Cancel and stay on current event
+                        }
+
+                    }
+                }
+                gameManager.SaveProgress(userId, nextEventId);
                 LoadEvent(nextEventId);
                 HideYesNoButtons();
             }
@@ -179,6 +239,7 @@ namespace AdventureGame.AdventureGame.UI
         private void ProcessChoice(int eventId)
         {
             Console.WriteLine($"Attempting to load event {eventId}");
+            gameManager.SaveProgress(userId,eventId);
             LoadEvent(eventId);
         }
         private void ShowItemSelection(int eventId)
@@ -248,6 +309,81 @@ namespace AdventureGame.AdventureGame.UI
             MessageBox.Show($"You picked up :{string.Join(", ", selectItems)}");
 
         }
-      
+
+        private void HandleGrantsItem(GameEvent currentEvent)
+        {
+            if(string.IsNullOrEmpty(currentEvent.GrantsItem))
+            {
+                return;
+            }
+            string item = currentEvent.GrantsItem.Trim();
+
+            Console.WriteLine("Item Name: " + item);
+
+            if(item.Equals("Arm",StringComparison.OrdinalIgnoreCase))
+            {
+                if(!gameManager.IsArmAttached(userId))
+                {
+                    gameManager.SetArmAttached(userId, true);
+                    MessageBox.Show("Rusty's Arm is now attached!");
+                }
+            }
+            else
+            {
+                int itemId = gameManager.GetInventoryIDByName(item);
+                int quantity = 1;
+                gameManager.AddPlayerInventory(userId,itemId,quantity);
+                MessageBox.Show($"You received:{item}");
+            }
+        }
+        private void LoadPlayerProgress()
+        {
+            Player player = gameManager.GetPlayer(userId);
+            if (player == null)
+            {
+                //Create new player 
+                gameRepository.CreateNewPlayer(userId);
+                LoadEvent(1);
+            }
+            else
+            {
+                LoadEvent(player.EventID);
+            }
+        }
+        private async Task HandleRandomEvent()
+        {
+            //Creating loading progress
+            ProgressBar progressBar = new ProgressBar()
+            {
+                Style= ProgressBarStyle.Marquee,
+                Width = 200,
+                Height = 20,
+                Location = new Point(10,10),
+                MarqueeAnimationSpeed = 50
+            };
+            pnlChoices.Controls.Add(progressBar);
+            progressBar.Visible = true;
+            await Task.Delay(3000);
+
+            Random rand = new Random();
+            int chance = rand.Next(0, 100); //0 to 99
+            bool success = chance < 70;
+
+            int nextEventId = success ? gameEvent.NextEventYes.Value : gameEvent.NextEventNo.Value;
+            LoadEvent(nextEventId);
+        }
+        private void CheckGameStatus(GameEvent gameEvent)
+        {
+            if(gameEvent.GameStatus == GameStatus.GameOver)
+            { 
+                gameManager.SaveStatus(userId, GameStatus.GameOver);
+                MessageBox.Show("Game Over!");
+            }
+            else if (gameEvent.GameStatus == GameStatus.Completed)
+            {
+                gameManager.SaveStatus(userId, GameStatus.Completed);
+                MessageBox.Show("Game Completed!");
+            }
+        }
     }
 }

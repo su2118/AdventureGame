@@ -8,12 +8,14 @@ namespace AdventureGame.AdventureGame.Model
 {
     public class Player
     {
-        public int PlayerID { get; set; }
+        public int UserID { get; set; }
 
-        public string PlayerName { get; set; }
+        public int EventID { get; set; }
 
-        public int LivesRemaining { get; set; }
+        public GameStatus GameStatus { get; set; }
 
-        public string GameStatus { get; set; }
+        public bool HasArm {  get; set; }
+
+        public DateTime LastSaved { get; set; }
     }
 }

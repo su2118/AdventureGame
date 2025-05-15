@@ -28,15 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             this.lblChapterName = new DevExpress.XtraEditors.LabelControl();
-            this.behaviorManager1 = new DevExpress.Utils.Behaviors.BehaviorManager(this.components);
             this.lblStoryText = new DevExpress.XtraEditors.LabelControl();
             this.pnlChoices = new DevExpress.XtraEditors.PanelControl();
             this.btnNo = new DevExpress.XtraEditors.SimpleButton();
             this.btnYes = new DevExpress.XtraEditors.SimpleButton();
             this.btnInventory = new DevExpress.XtraEditors.SimpleButton();
-            ((System.ComponentModel.ISupportInitialize)(this.behaviorManager1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pnlChoices)).BeginInit();
             this.pnlChoices.SuspendLayout();
             this.SuspendLayout();
@@ -55,9 +52,10 @@
             // 
             this.lblStoryText.Appearance.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblStoryText.Appearance.Options.UseFont = true;
-            this.lblStoryText.Location = new System.Drawing.Point(12, 143);
+            this.lblStoryText.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.Vertical;
+            this.lblStoryText.Location = new System.Drawing.Point(12, 133);
             this.lblStoryText.Name = "lblStoryText";
-            this.lblStoryText.Size = new System.Drawing.Size(68, 19);
+            this.lblStoryText.Size = new System.Drawing.Size(412, 19);
             this.lblStoryText.TabIndex = 7;
             this.lblStoryText.Text = "StoryText";
             // 
@@ -100,7 +98,7 @@
             // 
             // btnInventory
             // 
-            this.btnInventory.Location = new System.Drawing.Point(474, 389);
+            this.btnInventory.Location = new System.Drawing.Point(349, 12);
             this.btnInventory.Name = "btnInventory";
             this.btnInventory.Size = new System.Drawing.Size(75, 23);
             this.btnInventory.TabIndex = 9;
@@ -118,7 +116,6 @@
             this.Controls.Add(this.lblChapterName);
             this.Name = "GameForm";
             this.Text = "GameForm";
-            ((System.ComponentModel.ISupportInitialize)(this.behaviorManager1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pnlChoices)).EndInit();
             this.pnlChoices.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -129,7 +126,6 @@
         #endregion
 
         private DevExpress.XtraEditors.LabelControl lblChapterName;
-        private DevExpress.Utils.Behaviors.BehaviorManager behaviorManager1;
         private DevExpress.XtraEditors.LabelControl lblStoryText;
         private DevExpress.XtraEditors.PanelControl pnlChoices;
         private DevExpress.XtraEditors.SimpleButton btnNo;

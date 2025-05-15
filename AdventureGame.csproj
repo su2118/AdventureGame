@@ -119,6 +119,7 @@
     <Compile Include="AdventureGame.Model\GameChapter.cs" />
     <Compile Include="AdventureGame.Model\GameChoice.cs" />
     <Compile Include="AdventureGame.Model\GameEvent.cs" />
+    <Compile Include="AdventureGame.Model\GameStatus.cs" />
     <Compile Include="AdventureGame.Model\Inventory.cs" />
     <Compile Include="AdventureGame.Model\Player.cs" />
     <Compile Include="AdventureGame.Model\PlayerInventory.cs" />

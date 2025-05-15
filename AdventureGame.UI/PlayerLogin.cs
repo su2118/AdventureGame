@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using AdventureGame.AdventureGame.Business;
+using Org.BouncyCastle.Bcpg;
 
 namespace AdventureGame.AdventureGame.UI
 {
@@ -84,8 +85,13 @@ namespace AdventureGame.AdventureGame.UI
 
             if (success)
             {
-                MessageBox.Show("Account created successfully! Please Log in");
-                this.Close(); //close the form 
+                int userId = userManager.getUserID(username);
+                MessageBox.Show("Account created successfully!");
+               // this.Close(); //close the form 
+                this.Hide();
+                gameManager.SetUser(userId);
+                GameForm gameForm = new GameForm(userId);
+                gameForm.ShowDialog();
             }
             else
             {

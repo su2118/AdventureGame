@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using AdventureGame.AdventureGame.Data;
 using AdventureGame.AdventureGame.Model;
 using DevExpress.Internal.WinApi.Windows.UI.Notifications;
+using DevExpress.XtraEditors.Popup;
 using DevExpress.XtraPrinting.Native.Interaction;
 
 namespace AdventureGame.AdventureGame.Business
@@ -29,10 +30,10 @@ namespace AdventureGame.AdventureGame.Business
             repository = new GameRepository();
 
         }
-        public void LoadChapter(int chapterID)
+       /* public void LoadChapter(int chapterID)
         {
-            //CurrentChapter = repository.GetChapter(chapterID);
-        }
+            CurrentChapter = repository.GetChapter(chapterID);
+        }*/
 
         // Fetch and validate a game event
         public GameEvent GetGameEvent(int eventId)
@@ -73,20 +74,54 @@ namespace AdventureGame.AdventureGame.Business
                 MessageBox.Show("Error");
             }
         }
+        public int GetInventoryIDByName(string item)
+        {
+            return repository.GetInventoryIDByName(item);   
+        }
         public void UpdatePlayerInventory(int userId, List<int> selectedItems)
         {
             Dictionary<int,int> quantities = selectedItems.ToDictionary(itemId => itemId, _ => 0 );
             repository.UpdatePlayerInventory(userId, quantities);
         }
-        // Handle player choice and determine next event
-        /* public int ProcessChoice(int eventId, string choice)
-         {
-             GameEvent gameEvent = GetGameEvent(eventId);
-             if (gameEvent.IsYesNoQuestion)
-             {
-                 return choice == "Yes" ? gameEvent.NextEventYes ?? 0 : gameEvent.NextEventNo ?? 0;
-             }
-             return gameEvent.NextEventYes ?? 0; // Default to NextEventYes if no Yes/No choice
-         }*/
+        public void AddPlayerInventory(int userId, int itemId, int quantity)
+        {
+            repository.AddPlayerInventory(userId, itemId, quantity);
+        }
+        public void UseItems(int userId, List<string> itemNames)
+        {
+            foreach(string item in itemNames)
+            {
+                repository.UseItem(userId, item);
+            }
+        }
+        public bool HasAllItems(int userId, List<string> itemNames)
+        {
+            return itemNames.All(item => repository.PlayerHasItem(userId, item));
+        }
+
+        public void SetArmAttached(int userId, bool hasArm)
+        {
+            repository.UpdateArmStatus(userId, hasArm);
+        }
+        public bool IsArmAttached(int userId)
+        {
+            return repository.GetArmStatus(userId);
+        }
+        public Player GetPlayer(int userId)
+        {
+            return repository.GetPlayer(userId);
+        }
+        public void SaveProgress (int userId, int eventId)
+        {
+            repository.UpdatePlayerProgress(userId, eventId);
+        }
+        public void CreateNewPlayer(int userId)
+        {
+            repository.CreateNewPlayer(userId);
+        }
+        public void SaveStatus(int userId, GameStatus status)
+        {
+            repository.UpdatePlayerStatus(userId, status);
+        }
     }
 }

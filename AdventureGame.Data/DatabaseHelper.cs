@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
+using System.Configuration;
 
 namespace AdventureGame.AdventureGame.Data
 {
     public static class DatabaseHelper
     {
-        public static string connectionString = "server=localhost;uid=root;pwd=512788;database=test;";
+        public static string connectionString = ConfigurationManager.ConnectionStrings["MyDbConnection"].ConnectionString;
 
         //Execute SELECT query 
         public static List<Dictionary<string, object>> ExecuteQuery(string query, Dictionary<string, object> parameters = null)

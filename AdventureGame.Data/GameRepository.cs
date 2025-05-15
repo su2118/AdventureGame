@@ -13,24 +13,27 @@ namespace AdventureGame.AdventureGame.Data
 {
     public class GameRepository
     {
+        //Get chapter name for each event
         public string GetChapterNameForEvent(int eventId)
         {
-            string query = "SELECT gc.ChapterName from GameChapter gc " +
-                "JOIN GameEvent ge ON gc.ChapterID = ge.ChapterID " +
-                "WHERE ge.EventID = @eventId";
-            var parameters = new Dictionary<string, object> { { "@eventId", eventId } };
+            string query = @"SELECT gc.ChapterName from GameChapter gc 
+                             JOIN GameEvent ge ON gc.ChapterID = ge.ChapterID 
+                             WHERE ge.EventID = @eventId";
+            Dictionary<string, object> parameters = new Dictionary<string, object> { { "@eventId", eventId } };
 
             object result = DatabaseHelper.ExecuteScalar(query, parameters);
             return result != null ? result.ToString() : "Unknown Chapter";
         }
 
+        // Get game event 
         public GameEvent GetEvent(int eventId)
         {
-            string query = "SELECT * FROM GameEvent WHERE EventID = @eventId";
-            var parameters = new Dictionary<string, object> { { "@eventId", eventId } };
+            string query = @"SELECT * FROM GameEvent 
+                             WHERE EventID = @eventId";
+            Dictionary<string, object> parameters = new Dictionary<string, object> { { "@eventId", eventId } };
             var result = DatabaseHelper.ExecuteQuery(query, parameters);
             if (result.Count == 0) return null; // No event found
-            var row = result[0];
+            Dictionary<string, object> row = result[0];
             return new GameEvent
             {
                 EventID = Convert.ToInt32(row["EventID"]),
@@ -39,7 +42,11 @@ namespace AdventureGame.AdventureGame.Data
                 NextEventYes = row["NextEventYes"] as int?,
                 NextEventNo = row["NextEventNo"] as int?,
                 MoveToChapter = row["MoveToChapter"] as int?,
-                RedirectToEventID = row["RedirectToEventID"] as int?
+                RedirectToEventID = row["RedirectToEventID"] as int?,
+                RequiredItem = row["RequiredItem"].ToString(),
+                GrantsItem = row["GrantsItem"].ToString(),
+                IsRandomEvent = Convert.ToBoolean(row["IsRandomEvent"]),
+                GameStatus = (GameStatus)Convert.ToInt32(row["GameStatus"])
             };
         }
 
@@ -47,12 +54,12 @@ namespace AdventureGame.AdventureGame.Data
         // Get all available choices for an event
         public List<GameEvent> GetChoices(int eventId)
         {
-            string query = "SELECT g.EventID, g.EventName, c.ChoiceText " +
-                "From ChapterChoice c " +
-                "JOIN GameEvent g ON c.ToEventID = g.EventID " +
-                "WHERE c.FromEventID = @eventId";
+            string query = @"SELECT g.EventID, g.EventName, c.ChoiceText
+                            From ChapterChoice c 
+                            JOIN GameEvent g ON c.ToEventID = g.EventID 
+                            WHERE c.FromEventID = @eventId";
            
-            var parameters = new Dictionary<string, object> { { "@eventId", eventId } };
+            Dictionary<string, object> parameters = new Dictionary<string, object> { { "@eventId", eventId } };
             var result = DatabaseHelper.ExecuteQuery(query, parameters);
             List<GameEvent> choices = new List<GameEvent>();
             foreach (var row in result)
@@ -67,28 +74,14 @@ namespace AdventureGame.AdventureGame.Data
             return choices;
         }
 
-        // To save player's choice
-        public void SavePlayerChoice(int playerId, int eventId, string choice, int chosenNextEventId)
-        {
-            string query = "INSERT INTO PlayerChoice (PlayerID, EventID, ChoiceMade, ChosenNextEventID) " +
-                           "VALUES (@playerId, @eventId, @choice, @chosenNextEventId)";
-            var parameters = new Dictionary<string, object>
-            {
-               { "@playerId", playerId },
-               { "@eventId", eventId },
-               { "@choice", choice },
-               { "@chosenNextEventId", chosenNextEventId }
-            };
-            DatabaseHelper.ExecuteNonQuery(query, parameters);
-        }
-
+        //Get Player Inventory 
         public List<PlayerInventory> GetPlayerInventory(int userId)
         {
             string query = @"SELECT pi.UserID, pi.InventoryID, i.ItemName, pi.Quantity 
                            from PlayerInventory pi
                            JOIN Inventory i ON pi.InventoryID = i.InventoryID
                            WHERE pi.UserID = @userId";
-            var parameters = new Dictionary<string, object> { { "@userId", userId } };
+            Dictionary<string, object> parameters = new Dictionary<string, object> { { "@userId", userId } };
             var result = DatabaseHelper.ExecuteQuery(query, parameters);
 
             List<PlayerInventory> inventory = new List<PlayerInventory>();
@@ -106,16 +99,17 @@ namespace AdventureGame.AdventureGame.Data
 
         }
 
+        //Get Event Item 
         public List<string> GetEventItem(int eventId)
         {
             string query = @"SELECT i.ItemName 
                              FROM EventItem ei
                              JOIN Inventory i ON ei.InventoryID = i.InventoryID
                              WHERE ei.EventID = @eventId";
-            var parameters = new Dictionary<string, object> { { "@eventId", eventId } };
+            Dictionary<string, object> parameters = new Dictionary<string, object> { { "@eventId", eventId } };
             var result = DatabaseHelper.ExecuteQuery(query, parameters);
 
-            var items = new List<string>();
+            List<string> items = new List<string>();
 
             foreach(var row in result)
             {
@@ -139,13 +133,14 @@ namespace AdventureGame.AdventureGame.Data
              DatabaseHelper.ExecuteNonQuery(query, parameters);
         }*/
 
+        //Add Items to Player Inventory 
         public void AddItemToPlayerInventory(int userId, List<int> inventoryIds)
         {
             if(inventoryIds.Count == 0) return; // No items to addd
 
             string query = @"INSERT INTO PlayerInventory (userID, InventoryID) VALUES ";
 
-            var parameters = new Dictionary<string, object> { { "@userId", userId } };
+            Dictionary<string, object> parameters = new Dictionary<string, object> { { "@userId", userId } };
 
             Console.WriteLine("List of item ID"+inventoryIds);
 
@@ -159,17 +154,15 @@ namespace AdventureGame.AdventureGame.Data
 
             }
             query += string.Join(",", values);
-
-            Console.WriteLine("Final Query"+query);
             DatabaseHelper.ExecuteNonQuery(query, parameters);
         }
 
-
+        // Get Inventory ID from Inventory Table by Item Name
         public int GetInventoryIDByName(string itemName)
         {
-            string query = @"Select InventoryID FROM Inventory WHERE ItemName = @itemName";
+            string query = @"SELECT InventoryID FROM Inventory WHERE ItemName = @itemName";
 
-            var parameters = new Dictionary<string, object> { { "@itemName", itemName } };
+            Dictionary<string, object> parameters = new Dictionary<string, object> { { "@itemName", itemName } };
 
             var result = DatabaseHelper.ExecuteQuery(query,parameters);
 
@@ -192,12 +185,13 @@ namespace AdventureGame.AdventureGame.Data
             return inventoryIds;
         }*/
 
+        //Get Inventory IDs from Inventory Table by Item Name
         public List<int> GetInventoryIDsByName(List<string> itemName)
         {
             string placeholder = string.Join(",", itemName.Select((_,i) => $"@name{i}"));
-            string query = $@"Select InventoryID FROM Inventory WHERE ItemName IN({placeholder})";
+            string query = $@"SELECT InventoryID FROM Inventory WHERE ItemName IN({placeholder})";
 
-            var parameters = new Dictionary<string, object> ();
+            Dictionary<string, object> parameters = new Dictionary<string, object> ();
             for(int i=0; i<itemName.Count; i++)
             {
                 parameters.Add($"@name{i}", itemName[i]);
@@ -206,13 +200,15 @@ namespace AdventureGame.AdventureGame.Data
             return result.Select(row => Convert.ToInt32(row["InventoryID"])).ToList();
         }
 
+
+        //Update the item quantity in Player Inventory 
         public void UpdatePlayerInventory(int userId, Dictionary<int, int> itemQuantites)
         {
-            string query = @"Update PlayerInventory SET Quantity = @quantity
+            string query = @"UPDATE PlayerInventory SET Quantity = @quantity
                             WHERE UserID = @userId AND InventoryID = @itemId";
             foreach (var item in itemQuantites) 
             {
-                var parameters = new Dictionary<string, object>
+                Dictionary<string,object> parameters = new Dictionary<string, object>
                 {
                     { "@userId", userId },
                     { "@itemId", item.Key },
@@ -221,6 +217,122 @@ namespace AdventureGame.AdventureGame.Data
                 DatabaseHelper.ExecuteNonQuery(query, parameters);
             }
         }
+        public void AddPlayerInventory(int userId,int itemId, int quantity)
+        {
+            string query = @"INSERT INTO PlayerInventory (userID, InventoryID, Quantity) VALUES ";
+            Dictionary<string, object> parameters = new Dictionary<string, object>
+            {
+                { "@userId", userId },
+                { "@itemId", itemId },
+                { "@quantity", quantity }
+            };
+            DatabaseHelper.ExecuteNonQuery(query, parameters);
+            
+        }
 
+        //Check if the player has item in the player inventory to use 
+        public bool PlayerHasItem(int userId, string itemName)
+        {
+            string query = @"SELECT COUNT(*) FROM PlayerInventory pi
+                            JOIN Inventory i ON pi.InventoryID = i.InventoryID
+                            WHERE pi.UserID = @userId AND i.ItemName = @itemName AND pi.Quantity > 0";
+            Dictionary<string, object> parameters = new Dictionary<string, object>
+            {
+                { "@userId", userId },
+                { "@itemName", itemName }
+            };
+            return Convert.ToInt32(DatabaseHelper.ExecuteScalar(query, parameters)) > 0;
+        }
+
+        //Set item quantity - 1
+        public void UseItem(int userId, string itemName)
+        {
+            string query = @"UPDATE PlayerInventory pi
+                            JOIN Inventory i ON pi.InventoryID = i.InventoryID
+                            SET pi.Quantity = pi.Quantity - 1
+                            WHERE pi.UserID = @userId AND i.ItemName = @itemName AND pi.Quantity > 0";
+            Dictionary<string, object> parameters = new Dictionary<string, object>
+            {
+                { "@userId", userId },
+                { "@itemName", itemName }
+            };
+
+            DatabaseHelper.ExecuteNonQuery(query,parameters);
+        }
+
+        //Update Arm status
+        public void UpdateArmStatus(int userId, bool hasArm)
+        {
+            string query = @"UPDATE Player SET HasArm = @hasArm WHERE UserID = @userId";
+            Dictionary<string, object> parameters = new Dictionary<string, object>
+            {
+                { "@userId", userId },
+                { "@hasArm", hasArm }
+            };
+
+            DatabaseHelper.ExecuteNonQuery(query, parameters);
+        }
+
+        public bool GetArmStatus(int userId)
+        {
+            string query = @"SELECT HasArm FROM Player WHERE UserID = @userId";
+            Dictionary<string, object> parameters = new Dictionary<string, object>
+            {
+                { "@userId", userId }
+            };
+            return Convert.ToInt32(DatabaseHelper.ExecuteScalar(query, parameters)) > 0;
+        }
+
+        public void CreateNewPlayer(int userId)
+        {
+            string query = @"INSERT INTO Player (UserID, EventID, GameStatus, LastSaved, HasArm) VALUES
+                            (@userId, 1, 0, Now(), FALSE)";
+            Dictionary<string, object> parameters = new Dictionary<string, object>
+            {
+                { "@userId", userId }
+            };
+            DatabaseHelper.ExecuteNonQuery(query, parameters);
+        }
+
+        public Player GetPlayer(int userId)
+        {
+            string query = @"SELECT * FROM Player WHERE UserID = @userId";
+            Dictionary<string, object> parameters = new Dictionary<string, object>
+            {
+                { "@userId", userId }
+            };
+            var result = DatabaseHelper.ExecuteQuery(query, parameters);
+            if (result.Count == 0) return null; // No event found
+            Dictionary<string, object> row = result[0];
+            return new Player
+            {
+                UserID = Convert.ToInt32(row["UserID"]),
+                EventID = Convert.ToInt32(row["EventID"]),
+                GameStatus = (GameStatus)Convert.ToInt32(row["GameStatus"]),
+                LastSaved = Convert.ToDateTime(row["LastSaved"]),
+                HasArm = Convert.ToBoolean(row["HasArm"])
+
+            };
+        }
+        public void UpdatePlayerProgress(int userId, int eventId)
+        {
+            string query = @"UPDATE Player SET EventID = @eventId, LastSaved = NOW() WHERE UserID = @userId" ;
+            Dictionary<string, object> parameters = new Dictionary<string, object>
+            {
+                { "@userId", userId },
+                {"@eventId", eventId }
+            };
+            DatabaseHelper.ExecuteNonQuery(query, parameters);
+        }
+        public void UpdatePlayerStatus(int userId, GameStatus status)
+        {
+            string query = @"UPDATE Player SET GameStatus = @status WHERE UserID = @userId";
+            Dictionary<string, object> parameters = new Dictionary<string, object>
+            {
+                { "@userId", userId },
+                {"@status", (int)status }
+            };
+            DatabaseHelper.ExecuteNonQuery(query, parameters);
+        }
     }
 }
