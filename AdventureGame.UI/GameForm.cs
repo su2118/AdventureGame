@@ -105,7 +105,7 @@ namespace AdventureGame.AdventureGame.UI
                 if (gameEvent.NextEventYes.HasValue)
                 {
 
-                    await Task.Delay(2000);
+                    await Task.Delay(2500);
 
                     LoadEvent(gameEvent.NextEventYes.Value);     
                             
@@ -115,7 +115,7 @@ namespace AdventureGame.AdventureGame.UI
                     LoadChoices(eventId);
                 }
             }
-            CheckGameStatus(gameEvent);
+            CheckGameStatus();
         }
         // Load dynamic choices as buttons
         private void LoadChoices(int eventId)
@@ -368,7 +368,7 @@ namespace AdventureGame.AdventureGame.UI
             int nextEventId = success ? gameEvent.NextEventYes.Value : gameEvent.NextEventNo.Value;
             LoadEvent(nextEventId);
         }
-        private void CheckGameStatus(GameEvent gameEvent)
+        private void CheckGameStatus()
         {
             if(gameEvent.GameStatus == GameStatus.GameOver)
             { 
