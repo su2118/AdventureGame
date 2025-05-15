@@ -27,8 +27,6 @@ namespace AdventureGame.AdventureGame.UI
 
         private GameEvent gameEvent;
 
-     //   private int currentPlayerId;
-
         private int userId; 
         public GameForm(int userId)
         {
@@ -57,10 +55,8 @@ namespace AdventureGame.AdventureGame.UI
 
             HandleGrantsItem(gameEvent);
 
-            Console.WriteLine("Random:" + gameEvent.IsRandomEvent);
             if (gameEvent.IsRandomEvent)
             {
-                Console.WriteLine("It is a random event");
                 await HandleRandomEvent();
                 return;
             }
