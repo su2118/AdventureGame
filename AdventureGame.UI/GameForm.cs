@@ -116,6 +116,7 @@ namespace AdventureGame.AdventureGame.UI
                 }
             }
             CheckGameStatus();
+            RequiredItems();
         }
         // Load dynamic choices as buttons
         private void LoadChoices(int eventId)
@@ -135,7 +136,7 @@ namespace AdventureGame.AdventureGame.UI
                 {
                     Text = choice.EventText,
                     Tag = choice.EventID,
-                    Width = 100,
+                    Width = 200,
                     Height = 50,
                     Location = new Point(10,yOffset),
                     BackColor = Color.SlateGray,
@@ -244,20 +245,33 @@ namespace AdventureGame.AdventureGame.UI
             List<string> foundItems = gameManager.GetEventItem(eventId);
             List<CheckBox> checkBoxes = new List<CheckBox>();
             int yOffset = 10;
-
+            int enabledCount = 0;
             pnlChoices.Controls.Clear();
 
+            List<PlayerInventory> playerInventory = gameManager.GetPlayerInventory(userId);
+            HashSet<string> ownedItemNames = playerInventory
+                .Select(pi => pi.ItemName.ToLower())
+                .ToHashSet();
             //create check box for found items
             foreach (string item in foundItems)
             {
+                bool isOwned = ownedItemNames.Contains(item.ToLower());
                 CheckBox chkItem = new CheckBox()
                 {
                     Text = item,
                     Tag = item,
                     Location = new Point(10, yOffset),
-                    AutoSize = true
+                    AutoSize = true,
+                    Enabled = !isOwned
                 };
-
+                if (!isOwned)
+                {
+                    enabledCount++;
+                }
+                else
+                {
+                    btnBack.Enabled = true;
+                }
                 checkBoxes.Add(chkItem);
                 pnlChoices.Controls.Add(chkItem);
                 yOffset += 30;
@@ -268,8 +282,9 @@ namespace AdventureGame.AdventureGame.UI
             {
                 Text = "Pick Selected Items",
                 Location = new Point(10, yOffset),
-                Width = 200
-            };
+                Width = 200,
+                Enabled = enabledCount > 0
+            }; 
             btnConfirm.Click += (sender, e) =>
             {
                 if (gameEvent.NextEventYes.HasValue)
@@ -279,7 +294,6 @@ namespace AdventureGame.AdventureGame.UI
                 PickSelectedItems(checkBoxes, eventId);
             };
             pnlChoices.Controls.Add(btnConfirm);
-            
         }
 
           private void btnInventory_Click(object sender, EventArgs e)
@@ -287,7 +301,7 @@ namespace AdventureGame.AdventureGame.UI
               InventoryForm inventoryForm = new InventoryForm(userId);
               inventoryForm.ShowDialog();
           }
-
+          
         private void PickSelectedItems(List<CheckBox> checkBoxes, int eventId)
         {
             List<string> selectItems = checkBoxes
@@ -313,8 +327,6 @@ namespace AdventureGame.AdventureGame.UI
                 return;
             }
             string item = currentEvent.GrantsItem.Trim();
-
-            Console.WriteLine("Item Name: " + item);
 
             if(item.Equals("Arm",StringComparison.OrdinalIgnoreCase))
             {
@@ -379,6 +391,25 @@ namespace AdventureGame.AdventureGame.UI
             {
                 gameManager.SaveStatus(userId, GameStatus.Completed);
                 MessageBox.Show("Game Completed!");
+            }
+        }
+
+        private void btnBack_Click(object sender, EventArgs e)
+        {
+            LoadEvent(1);
+        }
+        private void RequiredItems()
+        {
+            if (!string.IsNullOrEmpty(gameEvent.RequiredItem) && !gameEvent.IsYesNoQuestion)
+            {
+                List<string> requiredItems = gameEvent.RequiredItem
+                                            .Split(',')
+                                            .Select(x => x.Trim())
+                                            .ToList();
+                if (gameManager.HasAllItems(userId, requiredItems))
+                {
+                    gameManager.UseItems(userId, requiredItems);
+                }
             }
         }
     }

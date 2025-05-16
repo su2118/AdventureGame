@@ -219,7 +219,7 @@ namespace AdventureGame.AdventureGame.Data
         }
         public void AddPlayerInventory(int userId,int itemId, int quantity)
         {
-            string query = @"INSERT INTO PlayerInventory (userID, InventoryID, Quantity) VALUES ";
+            string query = @"INSERT INTO PlayerInventory (userID, InventoryID, Quantity) VALUES  (@userId, @itemId, @quantity)";
             Dictionary<string, object> parameters = new Dictionary<string, object>
             {
                 { "@userId", userId },

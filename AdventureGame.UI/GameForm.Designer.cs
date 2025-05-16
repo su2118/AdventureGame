@@ -34,6 +34,7 @@
             this.btnNo = new DevExpress.XtraEditors.SimpleButton();
             this.btnYes = new DevExpress.XtraEditors.SimpleButton();
             this.btnInventory = new DevExpress.XtraEditors.SimpleButton();
+            this.btnBack = new DevExpress.XtraEditors.SimpleButton();
             ((System.ComponentModel.ISupportInitialize)(this.pnlChoices)).BeginInit();
             this.pnlChoices.SuspendLayout();
             this.SuspendLayout();
@@ -105,11 +106,22 @@
             this.btnInventory.Text = "Inventory";
             this.btnInventory.Click += new System.EventHandler(this.btnInventory_Click);
             // 
+            // btnBack
+            // 
+            this.btnBack.Enabled = false;
+            this.btnBack.Location = new System.Drawing.Point(12, 12);
+            this.btnBack.Name = "btnBack";
+            this.btnBack.Size = new System.Drawing.Size(75, 23);
+            this.btnBack.TabIndex = 10;
+            this.btnBack.Text = "Back";
+            this.btnBack.Click += new System.EventHandler(this.btnBack_Click);
+            // 
             // GameForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.btnBack);
             this.Controls.Add(this.btnInventory);
             this.Controls.Add(this.pnlChoices);
             this.Controls.Add(this.lblStoryText);
@@ -131,5 +143,6 @@
         private DevExpress.XtraEditors.SimpleButton btnNo;
         private DevExpress.XtraEditors.SimpleButton btnYes;
         private DevExpress.XtraEditors.SimpleButton btnInventory;
+        private DevExpress.XtraEditors.SimpleButton btnBack;
     }
 }
